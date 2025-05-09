@@ -5,7 +5,7 @@ const width = 960, height = 1160;
 const svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height)
-    .style("background-color", "white");
+    .attr("fill", "white");
 
 const projection = d3.geoMercator()
     .scale(4000)
