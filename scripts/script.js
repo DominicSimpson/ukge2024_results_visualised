@@ -19,8 +19,8 @@ const projection = d3.geoMercator()
 const path = d3.geoPath().projection(projection);
 
 const partyColours = d3.scaleOrdinal()
-    .domain(["Labour", "Conservative", "Liberal Democrat", "Scottish National Party", "Green", "Others"])
-    .range(["#D50000", "#0087DC", "#FDBB30", "#FFF95D", "#008066", "#CCCCCC"]);
+    .domain(["Labour", "Conservative", "Liberal Democrat", "Scottish National Party", "Green", "Plaid Cymru", "Reform UK"])
+    .range(["#E4003B", "#0087DC", "#FAA61A", "#FDF38E", "#528D6B", "#005B54", "#12B6CF"]);
 
 Promise.all([
     d3.json('data/uk_constituencies_2024_bsc.geojson'),
@@ -33,6 +33,10 @@ Promise.all([
         const id = d.ons_id.trim(); 
         d.votes = +d.votes;
         d.share = +d.share;
+
+        if (d.party_name === 'Labour and Co-operative') {
+            d.party_name = 'Labour';
+        }
 
         if (!resultsMap.has(id) || d.votes > resultsMap.get(id).votes) {
             resultsMap.set(id, d);
