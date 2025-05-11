@@ -4,6 +4,10 @@ const width = 960, height = 1160;
 
 const svg = d3.select("body").append("svg")
     .attr("width", width)
+    .attr("height", height);
+
+svg.append("rect")
+    .attr("width", width)
     .attr("height", height)
     .attr("fill", "white");
 
@@ -21,7 +25,7 @@ const partyColours = d3.scaleOrdinal()
 Promise.all([
     d3.json('data/uk_constituencies_2024.geojson'),
     d3.csv('data/ukge_electionresults_2024.csv')
-])
+])  
 .then(([geoData, electionData]) => {
     const resultsMap = new Map();
     
@@ -31,7 +35,17 @@ Promise.all([
         d.share = +d.share;
 
         if (!resultsMap.has(id) || d.votes > resultsMap.get(id).votes) {
-        resultsMap.set(id, d);
+            resultsMap.set(id, d);
+        }
+    });
+
+    geoData.features.forEach(f => {
+        const bounds = path.bounds(f);
+        const width = bounds[1][0] - bounds[0][0];
+        const height = bounds[1][1] - bounds[0][1];
+
+        if (width > 800 || height > 1000) {
+            console.warn(`Suspicious geometry: ${f.properties.PCON24NM} - Width: ${width}, Height: ${height}`);
         }
     });
 
@@ -55,15 +69,19 @@ Promise.all([
                 const result = resultsMap.get(d.properties.PCON24CD);
                 return partyColours(result?.party_name || "Others");
             })
-            .append("title")
-            .text(d => {
-                const result = resultsMap.get(d.properties.PCON24CD);
-                return result
-                    ? `${d.properties.PCON24NM}
+        .each(function(d) {
+            const onsId = d.properties.PCON24CD;
+            const result = resultsMap.get(onsId);
+            const tooltipText = result
+                ? `${d.properties.PCON24NM}
     Winner: ${result.candidate_first_name} ${result.candidate_surname}
     Party:  ${result.party_name}
     Votes:  ${result.votes}
     Share   ${(result.share * 100).toFixed(2)}%`
-                        : `${d.properties.PCON24NM}: No result`;
+                : `${d.properties.PCON24NM}: No result`;
+
+            d3.select(this)
+                .append("title")
+                .text(tooltipText);
             });
 });
