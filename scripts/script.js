@@ -19,11 +19,11 @@ const projection = d3.geoMercator()
 const path = d3.geoPath().projection(projection);
 
 const partyColours = d3.scaleOrdinal()
-    .domain(["Labour", "Conservative", "Liberal Democrats", "SNP", "Green", "Others"])
-    .range(["#E4003B", "#0087DC", "#FAA61A", "#FFF95D", "#6AB023", "#CCCCCC"]);
+    .domain(["Labour", "Conservative", "Liberal Democrat", "Scottish National Party", "Green", "Others"])
+    .range(["#D50000", "#0087DC", "#FDBB30", "#FFF95D", "#008066", "#CCCCCC"]);
 
 Promise.all([
-    d3.json('data/uk_constituencies_2024.geojson'),
+    d3.json('data/uk_constituencies_2024_bsc.geojson'),
     d3.csv('data/ukge_electionresults_2024.csv')
 ])  
 .then(([geoData, electionData]) => {
