@@ -19,11 +19,40 @@ const projection = d3.geoMercator()
 const path = d3.geoPath().projection(projection);
 
 const partyColours = d3.scaleOrdinal()
-    .domain(["Labour", "Conservative", "Liberal Democrat", "Scottish National Party", "Green", "Plaid Cymru", "Reform UK", 
-        "Democratic Unionist Party", "Sinn Fein", "Traditional Unionist Voice", "Ulster Unionist Party", "Alliance", 
-        "Social Democratic and Labour Party", "Independent"])
-    .range(["#E4003B", "#0087DC", "#FAA61A", "#FDF38E", "#528D6B", "#005B54", "#12B6CF","#D46A4C", "#326760", 
-        "#0C3A6A", "#48A5EE", "#F6CB2F", "#2AA82C", "#BFB0B0"]);
+    .domain([
+        "Labour",
+        "Conservative", 
+        "Liberal Democrat", 
+        "Scottish National Party", 
+        "Green", 
+        "Plaid Cymru", 
+        "Reform UK", 
+        "Democratic Unionist Party", 
+        "Sinn Fein", 
+        "Traditional Unionist Voice", 
+        "Ulster Unionist Party", 
+        "Alliance", 
+        "Social Democratic and Labour Party", 
+        "Independent", 
+        "Other"
+    ])
+    .range([
+        "#E4003B", 
+        "#0087DC", 
+        "#FAA61A", 
+        "#FDF38E", 
+        "#02A95B", 
+        "#005B54", 
+        "#12B6CF",
+        "#D46A4C", 
+        "#089280", 
+        "#0C3A6A", 
+        "#8ac6f5", 
+        "#F6CB2F", 
+        "#35cf37", 
+        "#BFB0B0",
+        "#130202"
+    ]);
 
 Promise.all([
     d3.json('data/uk_constituencies_2024_bsc.geojson'),
