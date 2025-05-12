@@ -107,6 +107,16 @@ Promise.all([
             })
             .attr("stroke", "white")
             .attr("stroke-width", 0.5)
+            .on("mouseover", function () {
+                d3.select(this) 
+                    .attr("stroke", "black")
+                    .attr("stroke-width", 1.5);
+            })
+            .on("mouseout", function () {
+                d3.select(this)
+                    .attr("stroke", "white")
+                    .attr("stroke-width", 0.5);
+            })
         .each(function(d) {
             const onsId = d.properties.PCON24CD;
             const result = resultsMap.get(onsId);
