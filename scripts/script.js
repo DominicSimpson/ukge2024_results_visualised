@@ -1,10 +1,13 @@
 console.log("Hello World!");
 
+const map = L.map('map').setView([54.5, -2], 6);
+
+L.svg().addTo(map);
+
 const width = 960, height = 1160;
 
-const svg = d3.select("body").append("svg")
-    .attr("width", width)
-    .attr("height", height);
+const svg = d3.select("#map").select("svg");
+const g = svg.append("g").attr("class", "leaflet-zoom-hide");
 
 svg.append("rect")
     .attr("width", width)
