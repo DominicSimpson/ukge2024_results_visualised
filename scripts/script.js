@@ -9,17 +9,13 @@ const width = 960, height = 1160;
 const svg = d3.select("#map").select("svg");
 const g = svg.append("g").attr("class", "leaflet-zoom-hide");
 
-svg.append("rect")
-    .attr("width", width)
-    .attr("height", height)
-    .attr("fill", "white");
+const transform = d3.geoTransform({point: projectPoint});
+const path = d3.geoPath().projection(transform);
 
-const projection = d3.geoMercator()
-    .scale(4000)
-    .center([-2, 54.5])
-    .translate([width / 2, height / 2]);
-
-const path = d3.geoPath().projection(projection);
+function projectPoint(x, y) {
+    const point = map.latLngToLayerPoint(new L.LatLng(y, x));
+    this.stream.point(point.x, point.y);
+}
 
 const partyColours = d3.scaleOrdinal()
     .domain([
