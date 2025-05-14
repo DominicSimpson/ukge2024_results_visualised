@@ -7,7 +7,7 @@ L.svg().addTo(map);
 const width = 960, height = 1160;
 
 const svg = d3.select("#map").select("svg");
-const g = svg.append("g").attr("class", "leaflet-zoom-hide");
+const g = svg.append("g").attr("class", "");
 
 const projectPoint = function(x, y) {
     const point = map.latLngToLayerPoint(new L.LatLng(y, x));
@@ -132,3 +132,5 @@ map.whenReady(() => {
         });
     });
 });
+
+console.log("SVG is attached to:", svg.node());
