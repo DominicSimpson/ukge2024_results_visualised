@@ -3,12 +3,13 @@
   height: 800px;
 }
 
-.leaflet-overlay-pane svg {
+.leaflet-overlay-pane {
   pointer-events: auto;
 }
 
+.leaflet-overlay-pane svg,
 .leaflet-overlay-pane path {
-  pointer-events: auto;
+  pointer-events: all;
   cursor: pointer;
   transition: stroke 0.15s ease;
 }

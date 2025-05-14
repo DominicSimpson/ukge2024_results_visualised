@@ -3,10 +3,11 @@ console.log("Hello World!");
 const map = L.map('map').setView([54.5, -2], 6);
 
 L.svg().addTo(map);
+    
+const svg = d3.select("#map").select("svg")
+    .style("pointer-events", "auto")
+    .attr("pointer-events", null);
 
-const width = 960, height = 1160;
-
-const svg = d3.select("#map").select("svg");
 const g = svg.append("g").attr("class", "");
 
 const projectPoint = function(x, y) {
@@ -14,7 +15,7 @@ const projectPoint = function(x, y) {
     this.stream.point(point.x, point.y);
 }
 
-const projection = d3.geoTransform({point: projectPoint});
+const projection = d3.geoTransform({ point: projectPoint });
 const path = d3.geoPath().projection(projection);
 
 const partyColours = d3.scaleOrdinal()
@@ -107,7 +108,12 @@ map.whenReady(() => {
         })
         .attr("stroke", "white")
         .attr("stroke-width", 0.5)
+        .style("pointer-events", "visiblePainted")  // ensure interaction
+        .on("click", function (event, d) {
+            console.log("Clicked on:", d.properties.PCON24NM);
+        })
         .on("mouseover", function (event, d) {
+            console.log("Mouse over:", d.properties.PCON24NM);
             d3.select(this) 
                 .attr("stroke", "black")
                 .attr("stroke-width", 1.5);
@@ -117,9 +123,8 @@ map.whenReady(() => {
                 .attr("stroke", "white")
                 .attr("stroke-width", 0.5);
         })
-        .on("click", function (event, d) {
-            console.log("Clicked on:", d.properties.PCON24NM);
-        });
+
+        console.log("Number of paths:", paths.size()); // should be > 0
   
     const update = () => {
         paths.attr("d", path);
