@@ -9,13 +9,15 @@ const width = 960, height = 1160;
 const svg = d3.select("#map").select("svg");
 const g = svg.append("g").attr("class", "leaflet-zoom-hide");
 
-const transform = d3.geoTransform({point: projectPoint});
-const path = d3.geoPath().projection(transform);
 
-function projectPoint(x, y) {
+
+const projectPoint = function(x, y) {
     const point = map.latLngToLayerPoint(new L.LatLng(y, x));
     this.stream.point(point.x, point.y);
 }
+
+const projection = d3.geoTransform({point: projectPoint});
+const path = d3.geoPath().projection(projection);
 
 const partyColours = d3.scaleOrdinal()
     .domain([
@@ -76,11 +78,11 @@ Promise.all([
 
     geoData.features.forEach(f => {
         const bounds = path.bounds(f);
-        const width = bounds[1][0] - bounds[0][0];
-        const height = bounds[1][1] - bounds[0][1];
+        const geomWidth = bounds[1][0] - bounds[0][0];
+        const geomHeight = bounds[1][1] - bounds[0][1];
 
-        if (width > 800 || height > 1000) {
-            console.warn(`Suspicious geometry: ${f.properties.PCON24NM} - Width: ${width}, Height: ${height}`);
+        if (geomWidth > 800 || geomHeight > 1000) {
+            console.warn(`Suspicious geometry: ${f.properties.PCON24NM} - Width: ${geomWidth}, Height: ${geomHeight}`);
         }
     });
 
@@ -95,40 +97,32 @@ Promise.all([
     });
     console.log(`Matched ${matches} constituencies with results`);
 
-    svg.selectAll("path")
-        .data(geoData.features.filter(f => f.geometry && f.geometry.coordinates.length > 0))
-        .enter().append("path")
-            .attr("class", "constituency")
-            .attr("d", path)
-            .attr("fill", d => {
-                const result = resultsMap.get(d.properties.PCON24CD);
-                return partyColours(result?.party_name || "Others");
-            })
-            .attr("stroke", "white")
-            .attr("stroke-width", 0.5)
-            .on("mouseover", function () {
-                d3.select(this) 
-                    .attr("stroke", "black")
-                    .attr("stroke-width", 1.5);
-            })
-            .on("mouseout", function () {
-                d3.select(this)
-                    .attr("stroke", "white")
-                    .attr("stroke-width", 0.5);
-            })
-        .each(function(d) {
-            const onsId = d.properties.PCON24CD;
-            const result = resultsMap.get(onsId);
-            const tooltipText = result
-                ? `${d.properties.PCON24NM}
-    Winner: ${result.candidate_first_name} ${result.candidate_surname}
-    Party:  ${result.party_name}
-    Votes:  ${result.votes}
-    Share   ${(result.share * 100).toFixed(2)}%`
-                : `${d.properties.PCON24NM}: No result`;
+    const features = geoData.features.filter(f => f.geometry && f.geometry.coordinates.length > 0)
 
+    const paths = g.selectAll("path")
+        .data(features)
+        .enter().append("path")
+        .attr("fill", d => {
+            const result = resultsMap.get(d.properties.PCON24CD);
+            return partyColours(result?.party_name || "Other");
+        })
+        .attr("stroke", "white")
+        .attr("stroke-width", 0.5)
+        .on("mouseover", function (event, d) {
+            d3.select(this) 
+                .attr("stroke", "black")
+                .attr("stroke-width", 1.5);
+        })
+        .on("mouseout", function (event, d) {
             d3.select(this)
-                .append("title")
-                .text(tooltipText);
-            });
+                .attr("stroke", "white")
+                .attr("stroke-width", 0.5);
+        });
+  
+    const update = () => {
+        paths.attr("d", path);
+    };
+
+    map.on("zoomend moveend viewreset", update);
+    update();
 });
