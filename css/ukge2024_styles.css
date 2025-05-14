@@ -1,0 +1,9 @@
+.leaflet-overlay-pane svg {
+  pointer-events: auto;
+}
+
+.leaflet-overlay-pane path {
+  pointer-events: auto;
+  cursor: pointer;
+  transition: stroke 0.15s ease;
+}

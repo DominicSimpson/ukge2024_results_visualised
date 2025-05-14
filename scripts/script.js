@@ -9,8 +9,6 @@ const width = 960, height = 1160;
 const svg = d3.select("#map").select("svg");
 const g = svg.append("g").attr("class", "leaflet-zoom-hide");
 
-
-
 const projectPoint = function(x, y) {
     const point = map.latLngToLayerPoint(new L.LatLng(y, x));
     this.stream.point(point.x, point.y);
@@ -55,12 +53,13 @@ const partyColours = d3.scaleOrdinal()
         "#130202"
     ]);
 
-Promise.all([
-    d3.json('data/uk_constituencies_2024_bsc.geojson'),
-    d3.csv('data/ukge_electionresults_2024.csv')
+map.whenReady(() => {
+    Promise.all([
+        d3.json('data/uk_constituencies_2024_bsc.geojson'),
+        d3.csv('data/ukge_electionresults_2024.csv')
 ])  
-.then(([geoData, electionData]) => {
-    const resultsMap = new Map();
+    .then(([geoData, electionData]) => {
+        const resultsMap = new Map();
     
     electionData.forEach(d => {
         const id = d.ons_id.trim(); 
@@ -117,12 +116,19 @@ Promise.all([
             d3.select(this)
                 .attr("stroke", "white")
                 .attr("stroke-width", 0.5);
+        })
+        .on("click", function (event, d) {
+            console.log("Clicked on:", d.properties.PCON24NM);
         });
   
     const update = () => {
         paths.attr("d", path);
     };
 
-    map.on("zoomend moveend viewreset", update);
     update();
+
+    map.on("zoom move viewreset", () => {
+        requestAnimationFrame(update);
+        });
+    });
 });
