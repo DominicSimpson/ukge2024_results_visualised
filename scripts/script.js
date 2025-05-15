@@ -116,15 +116,22 @@ map.whenReady(() => {
             console.log("Mouse over:", d.properties.PCON24NM);
             d3.select(this) 
                 .attr("stroke", "black")
-                .attr("stroke-width", 1.5);
+                .attr("stroke-width", 2.0)
+                .style("cursor", "pointer");
+
         })
         .on("mouseout", function (event, d) {
             d3.select(this)
                 .attr("stroke", "white")
-                .attr("stroke-width", 0.5);
-        })
+                .attr("stroke-width", 0.5)
+                .style("cursor", "default");
+        });
 
-        console.log("Number of paths:", paths.size()); // should be > 0
+    svg.on("mouseleave", () => {
+        d3.selectAll("path").style("cursor", "default");
+    });   
+
+    console.log("Number of paths:", paths.size()); // should be > 0
   
     const update = () => {
         paths.attr("d", path);
