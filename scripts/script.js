@@ -10,6 +10,13 @@ const svg = d3.select("#map").select("svg")
 
 const g = svg.append("g").attr("class", "");
 
+const highlight = svg.append("path") // This ensures a full black border over each constituency on mouseover
+    .attr("class", "highlight") // Otherwise some constituencies don't fully display the black border
+    .attr("fill", "none") // Duplicate "highlight" layer above the map
+    .attr("stroke", "black")
+    .attr("stroke-width", 2)
+    .attr("pointer-events", "none"); // prevents it from intefering from hover
+
 const projectPoint = function(x, y) {
     const point = map.latLngToLayerPoint(new L.LatLng(y, x));
     this.stream.point(point.x, point.y);
@@ -114,17 +121,15 @@ map.whenReady(() => {
         })
         .on("mouseover", function (event, d) {
             console.log("Mouse over:", d.properties.PCON24NM);
-            d3.select(this) 
-                .attr("stroke", "black")
-                .attr("stroke-width", 2.0)
-                .style("cursor", "pointer");
-
+            highlight
+                .attr("d", path(d))
+                .style("display", "inline");
+            d3.select(this).style("cursor", "pointer");
         })
-        .on("mouseout", function (event, d) {
-            d3.select(this)
-                .attr("stroke", "white")
-                .attr("stroke-width", 0.5)
-                .style("cursor", "default");
+        .on("mouseout", function () {
+            highlight
+                .style("display", "none");
+            d3.select(this).style("cursor", "default");
         });
 
     svg.on("mouseleave", () => {
