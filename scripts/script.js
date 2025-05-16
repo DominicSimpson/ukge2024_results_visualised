@@ -118,6 +118,18 @@ map.whenReady(() => {
         .style("pointer-events", "visiblePainted")  // ensure interaction
         .on("click", function (event, d) {
             console.log("Clicked on:", d.properties.PCON24NM);
+
+            const featureBounds = path.bounds(d);
+
+            // Convert to LatLngBounds using Leaflet's unproject
+            const topLeft = map.layerPointToLatLng(featureBounds[0]);
+            const bottomRight = map.layerPointToLatLng(featureBounds[1]);
+            const bounds = L.latLngBounds(topLeft, bottomRight);
+
+            map.fitBounds(bounds, {
+                padding: [30, 30],
+                maxZoom: 10
+            });
         })
         .on("mouseover", function (event, d) {
             console.log("Mouse over:", d.properties.PCON24NM);
