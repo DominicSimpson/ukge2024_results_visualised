@@ -1,8 +1,15 @@
 console.log("Hello World!");
 
-const map = L.map('map').setView([54.5, -2], 6);
+const initialCenter = [54.5, -2];
+const initialZoom = 6;
+
+const map = L.map('map').setView(initialCenter, initialZoom);
 
 L.svg().addTo(map);
+
+document.getElementById('reset-zoom').addEventListener('click', () => {
+    map.setView(initialCenter, initialZoom);
+});
     
 const svg = d3.select("#map").select("svg")
     .style("pointer-events", "auto")
