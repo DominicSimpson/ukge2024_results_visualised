@@ -163,7 +163,7 @@ map.whenReady(() => {
   
     const update = () => {
         paths.attr("d", path);
-        highlight.attr("d", path); // keeps focus synced
+        highlight.attr("d", path);
     };
 
     update();
