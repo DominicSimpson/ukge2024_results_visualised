@@ -126,8 +126,11 @@ map.whenReady(() => {
         .on("click", function (event, d) {
             console.log("Clicked on:", d.properties.PCON24NM);
 
-            highlight.style("display", "none");
+            highlight
+                .attr("d", path(d))
+                .style("display", "inline");
 
+            //Zoom in
             const featureBounds = path.bounds(d);
             // Convert to LatLngBounds using Leaflet's unproject
             const topLeft = map.layerPointToLatLng(featureBounds[0]);
@@ -160,6 +163,7 @@ map.whenReady(() => {
   
     const update = () => {
         paths.attr("d", path);
+        highlight.attr("d", path); // keeps focus synced
     };
 
     update();
