@@ -8,7 +8,7 @@ const map = L.map('map').setView(initialCenter, initialZoom);
 L.svg().addTo(map);
 
 document.getElementById('reset-zoom').addEventListener('click', () => {
-    map.setView(initialCenter, initialZoom);
+    map.setView(initialCenter, initialZoom); // Reset Zoom function
 });
     
 const svg = d3.select("#map").select("svg")
@@ -126,8 +126,9 @@ map.whenReady(() => {
         .on("click", function (event, d) {
             console.log("Clicked on:", d.properties.PCON24NM);
 
-            const featureBounds = path.bounds(d);
+            highlight.style("display", "none");
 
+            const featureBounds = path.bounds(d);
             // Convert to LatLngBounds using Leaflet's unproject
             const topLeft = map.layerPointToLatLng(featureBounds[0]);
             const bottomRight = map.layerPointToLatLng(featureBounds[1]);
