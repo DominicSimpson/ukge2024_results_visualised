@@ -113,6 +113,8 @@ map.whenReady(() => {
 
     const features = geoData.features.filter(f => f.geometry && f.geometry.coordinates.length > 0)
 
+    let selectedConstituency = null;
+
     const paths = g.selectAll("path")
         .data(features)
         .enter().append("path")
@@ -125,6 +127,8 @@ map.whenReady(() => {
         .style("pointer-events", "visiblePainted")  // ensure interaction
         .on("click", function (event, d) {
             console.log("Clicked on:", d.properties.PCON24NM);
+
+            selectedConstituency = d; // store the selected constituency 
 
             highlight
                 .attr("d", path(d))
@@ -163,7 +167,9 @@ map.whenReady(() => {
   
     const update = () => {
         paths.attr("d", path);
-        highlight.attr("d", path);
+        if (selectedConstituency) {
+            highlight.attr("d", path(selectedConstituency));
+        }
     };
 
     update();
