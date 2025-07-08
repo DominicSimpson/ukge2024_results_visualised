@@ -1,10 +1,10 @@
 {
   "name": "ukge2024project",
   "version": "1.0.0",
-  "description": "Description to come",
+  "description": "UK General Election 2024 Results Visualised",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "repl": "node",
     "start": "serve ."
   },
@@ -13,5 +13,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "jest": "^30.0.4"
   }
 }
