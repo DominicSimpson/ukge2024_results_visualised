@@ -1,5 +1,10 @@
-const { renderDOM } = require('./helpers');
+const { renderDOM } = require('../test-utils.js/helpers');
 global.fetch = require('node-fetch');
+global.fetch = (...args) => import('node-fetch').then(({
+  default: fetch
+  }) => fetch(...args)
+);
+
 
 let dom;
 let document;

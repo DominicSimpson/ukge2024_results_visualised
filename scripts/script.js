@@ -1,5 +1,3 @@
-console.log("Hello World!");
-
 const initialCenter = [54.5, -2];
 const initialZoom = 6;
 
