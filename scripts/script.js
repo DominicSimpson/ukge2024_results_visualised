@@ -2,6 +2,8 @@ const initialCenter = [54.5, -2];
 const initialZoom = 6;
 
 const map = L.map('map').setView(initialCenter, initialZoom);
+const tooltip = d3.select("#tooltip");
+
 
 L.svg().addTo(map);
 
@@ -149,7 +151,19 @@ map.whenReady(() => {
             highlight
                 .attr("d", path(d))
                 .style("display", "inline");
+
             d3.select(this).style("cursor", "pointer");
+
+            tooltip
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY + 10) + "px")
+                .style("display", "block")
+                .html(`<strong>${d.properties.PCON24NM}</strong>`);
+        })
+        .on("mousemove", function (event) {
+            tooltip
+                .style("left", (event.pageX + 10), "px")
+                .style("right", (event.pageY + 10), "px");
         })
         .on("mouseout", function () {
             highlight
