@@ -4,7 +4,8 @@
   "description": "UK General Election 2024 Results Visualised",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest __tests__",
+    "test:e2e": "playwright test",
     "repl": "node",
     "start": "serve ."
   },
@@ -16,7 +17,9 @@
     "node-fetch": "^2.7.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.53.2",
     "jest": "^30.0.4",
-    "jsdom": "^26.1.0"
+    "jsdom": "^26.1.0",
+    "playwright": "^1.53.2"
   }
 }

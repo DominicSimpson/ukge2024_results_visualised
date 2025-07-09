@@ -26,10 +26,10 @@ describe('index.html', () => {
 
   it('can trigger a click event on the reset button', () => {
     const btn = document.querySelector('#reset-zoom');
-    let clicked = false;
+    let clicked = false; // boolean set to false
 
     btn.addEventListener('click', () => {
-      clicked = true;
+      clicked = true; // becomes true if click function works
     });
 
     btn.click();
